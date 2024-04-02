@@ -1,6 +1,6 @@
 # 🚀 Files Manager 📂
 
-<img src="https://github.com/simonrichard-dev/holbertonschool-files_manager/blob/main/image/files-manager0.jpeg">>
+<img src="https://github.com/simonrichard-dev/holbertonschool-files_manager/blob/main/image/fotor-ai-20240402165519.jpg">
 
 ## 📝 Description
 Files Manager is a simple platform for uploading and viewing files. It provides user authentication, file listing, uploading, permission management, file viewing, and image thumbnail generation functionalities.
@@ -30,7 +30,6 @@ npm install
 ```sh
 npm start
 ```
-
 
 ## 💡 Usage
 Once the server is running, you can access the API endpoints to perform various actions such as authentication, file management, and viewing.
