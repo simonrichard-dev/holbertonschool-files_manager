@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:7.2.4-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mongodb:
+    image: mongo:5.0.26-focal
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=files_manager
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  redis_data:
+  mongo_data:
