@@ -8,7 +8,7 @@ class RedisClient {
     });
   }
 
-  isAlive() {
+  async isAlive() {
     return this.client.connected;
   }
 
@@ -51,4 +51,4 @@ class RedisClient {
 
 const redisClient = new RedisClient();
 
-export default redisClient;
+module.exports = redisClient;
