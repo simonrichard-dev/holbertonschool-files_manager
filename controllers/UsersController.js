@@ -40,6 +40,30 @@ const UsersController = {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+
+  getMe: async (req, res) => {
+    const { userId } = req;
+
+    try {
+      // Retrieve user details from the database using userId
+      const user = await dbClient.db.collection('users').findOne({ _id: userId });
+
+      if (!user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      // Return user details (email and id)
+      const userData = {
+        id: user._id,
+        email: user.email,
+      };
+
+      return res.status(200).json(userData);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
 };
 
 module.exports = UsersController;
