@@ -64,6 +64,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://opens
 
 ## ✍️ Author
 - **Simon RICHARD** - *Junior Full-Stack Engineer* - [Simon RICHARD](https://www.linkedin.com/in/simonrichard-dev/)
+- **Amandine ASSENAT** - *Junior Front-end Engineer* - [Amandine ASSENAT](https://www.linkedin.com/in/amandine-assenat-a90714251/)
 
 ## 📧 Contact
 For any inquiries or feedback, please contact the project maintainer at 5607@holbertonstudents.com.
