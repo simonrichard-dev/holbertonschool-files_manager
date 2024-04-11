@@ -1,5 +1,7 @@
 // controllers/UsersController.js
 
+import { ObjectId } from 'mongodb';
+
 const sha1 = require('sha1');
 const dbClient = require('../utils/db');
 
@@ -24,6 +26,7 @@ const UsersController = {
 
       // Hash the password using SHA1
       const hashedPassword = sha1(password);
+      console.log(hashedPassword);
 
       // Create the new user in the database
       const result = await dbClient.db.collection('users').insertOne({ email, password: hashedPassword });
@@ -46,7 +49,8 @@ const UsersController = {
 
     try {
       // Retrieve user details from the database using userId
-      const user = await dbClient.db.collection('users').findOne({ _id: userId });
+      const user = await dbClient.db.collection('users').findOne({ _id: new ObjectId(userId) });
+      console.log(user);
 
       if (!user) {
         return res.status(401).json({ error: 'Unauthorized' });
