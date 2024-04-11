@@ -58,11 +58,11 @@ const AuthController = {
   authenticateUser: async (req, res, next) => {
     const { 'x-token': token } = req.headers;
     if (!token) {
-      return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     const userId = await redisClient.get(`auth_${token}`);
     if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     req.userId = userId;
     next();
