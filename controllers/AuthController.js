@@ -7,30 +7,24 @@ const dbClient = require('../utils/db');
 
 const AuthController = {
   getConnect: async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Basic ')) {
+    // Extraction and decoding of the credentials of the authorization header.
+    const authorizationHeader = req.headers.authorization || '';
+    const [email, password] = Buffer.from(authorizationHeader.replace('Basic ', ''), 'base64').toString().split(':');
+    if (!email || !password) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const encodedCredentials = authHeader.split(' ')[1];
-    const decodedCredentials = Buffer.from(encodedCredentials, 'base64').toString('utf-8');
-    const [email, password] = decodedCredentials.split(':');
-
-    // Find user by email and password
-    const hashedPassword = sha1(password);
-    const user = await dbClient.db.collection('users').findOne({ email, password: hashedPassword });
-
+    // Search for the user in the database and verify the password.
+    const user = await dbClient.db.collection('users').findOne({ email, password: sha1(password) });
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Generate a random token
+    // Creation of a new token and storage in Redis.
     const token = uuidv4();
+    await redisClient.set(`auth_${token}`, user._id.toString(), 86400);
 
-    // Store the user ID in Redis with the token as key (valid for 24 hours)
-    await redisClient.set(`auth_${token}`, user._id.toString(), 86400); // 86400 seconds = 24 hours
-
-    // Return the token
+    // Return of the generated token to the user.
     return res.status(200).json({ token });
   },
 
