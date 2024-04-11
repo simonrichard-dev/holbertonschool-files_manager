@@ -65,7 +65,7 @@ const AuthController = {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     req.userId = userId;
-    next();
+    return next();
   },
 };
 
