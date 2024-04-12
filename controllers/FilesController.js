@@ -130,4 +130,4 @@ const FilesController = {
   }
 }
 
-export default FilesController;
+module.exports = FilesController;
