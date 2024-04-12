@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb';
 import Queue from 'bull';
 import fs from 'fs';
-import mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
@@ -127,7 +126,7 @@ const FilesController = {
       isPublic: isPublic || false,
       parentId: parentId || 0,
     });
-  }
-}
+  },
+};
 
 module.exports = FilesController;
