@@ -276,6 +276,7 @@ const FilesController = {
     delete fileUpdated._id;
     return res.json(fileUpdated);
   },
+
   getFile: async (req, res) => {
     // check if the file exists
     const fileId = ObjectId(req.params.id);
@@ -306,7 +307,7 @@ const FilesController = {
     } catch (err) {
       return res.status(404).json({ error: 'Not found' });
     }
-  }, 
+  },
 };
 
 module.exports = FilesController;
