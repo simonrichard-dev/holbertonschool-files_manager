@@ -127,6 +127,69 @@ const FilesController = {
       parentId: parentId || 0,
     });
   },
+  getShow: async (req, res) => {
+    const token = req.headers['x-token'];
+    const userId = await redisClient.get(`auth_${token}`);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const fileId = new ObjectId(req.params.id);
+    const filesCollection = dbClient.db.collection('files');
+    const file = await filesCollection.findOne({ _id: fileId });
+    if (!file || userId !== file.userId.toString()) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    return res.status(200).json({
+      id: file._id,
+      userId: file.userId,
+      name: file.name,
+      type: file.type,
+      isPublic: file.isPublic,
+      parentId: file.parentId,
+    });
+  },
+  getIndex: async (req, res) => {
+    const token = req.headers['x-token'];
+    const userId = await redisClient.get(`auth_${token}`);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { parentId, page = 0 } = req.query;
+    const filesCollection = dbClient.db.collection('files');
+    const userIdtoFind = new ObjectId(userId);
+    let allFiles = [];
+
+    if (parentId) {
+      const cursor = await filesCollection.aggregate([
+        { $match: { userId: userIdtoFind, parentId: new ObjectId(parentId) } },
+        { $skip: page * 20 },
+        { $limit: 20 },
+      ]);
+      allFiles = await cursor.toArray();
+    } else {
+      const cursor = await filesCollection.aggregate([
+        { $match: { userId: userIdtoFind } },
+        { $skip: page * 20 },
+        { $limit: 20 },
+      ]);
+      allFiles = await cursor.toArray();
+    }
+
+    const jsonResponse = [];
+    for await (const file of allFiles) {
+      jsonResponse.push({
+        id: file._id,
+        userId: file.userId,
+        name: file.name,
+        type: file.type,
+        isPublic: file.isPublic,
+        parentId: file.parentId,
+      });
+    }
+
+    return res.status(200).json(jsonResponse);
+  },
 };
 
 module.exports = FilesController;
